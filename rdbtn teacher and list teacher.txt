@@ -1,0 +1,202 @@
+PRACTICAL 7
+Objective
+Create a radio button group with radio button of all courses in your college and on selecting a particular course, teacher-in- charge of that course should appear at the bottom of the screen.
+Code
+app/src/main/res/layout/activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RadioGroup
+            android:id="@+id/rgCourses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+        </RadioGroup>
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+app/src/main/java/pro/ghosh/radiogroupincharge/MainActivity.java
+package pro.ghosh.radiogroupincharge;
+
+import android.os.Bundle;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.HashMap;
+
+public class MainActivity extends AppCompatActivity {
+
+    private RadioGroup rgCourses;
+    private HashMap<String, String> coursesMap;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCourses();
+    }
+
+    private void initCourses() {
+        rgCourses = (RadioGroup) findViewById(R.id.rgCourses);
+
+        if (coursesMap == null) {
+            coursesMap = new HashMap<>();
+            coursesMap.put("B. Sc. (Hons.) Computer Science", "Dr. V. S. Dixit");
+            coursesMap.put("B. Com. (Hons.)", "Dr. Manika Jain");
+            coursesMap.put("B. A. (Hons.) Economics", "Dr. Apra Sinha");
+            coursesMap.put("B. Sc. (Hons.) Mathematics", "Dr. Raj Kumar Bhagat");
+
+            for (String course : coursesMap.keySet()) {
+                RadioButton rButton = new RadioButton(MainActivity.this);
+                rButton.setText(course);
+                rgCourses.addView(rButton);
+            }
+
+            rgCourses.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    int checkedRadioButtonId = rgCourses.getCheckedRadioButtonId();
+                    RadioButton rButton = (RadioButton) findViewById(checkedRadioButtonId);
+                    Snackbar.make(rgCourses, coursesMap.get(rButton.getText()), Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+            });
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PRACTICAL 8
+Objective
+Create a list of all courses in your college and on selecting a particular course parent department and the teacher-in-charge of that department should appear at the bottom of the screen.
+Code
+app/src/main/res/layout/activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ListView
+            android:id="@+id/lvCourses"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+app/src/main/res/layout/list_item.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tvListItem"
+        android:paddingVertical="10dp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+</LinearLayout>
+app/src/main/java/pro/ghosh/listdeptincharge/MainActivity.java
+package pro.ghosh.listdeptincharge;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+public class MainActivity extends AppCompatActivity {
+
+    private ListView lvCourses;
+    private HashMap<String, String> coursesMap;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        initCourses();
+    }
+
+    private void initCourses() {
+        lvCourses = (ListView) findViewById(R.id.lvCourses);
+
+        if (coursesMap == null) {
+            coursesMap = new HashMap<>();
+            coursesMap.put("B. Sc. (Hons.) Computer Science", "Deptt. of CS - Dr. V. S. Dixit");
+            coursesMap.put("B. Com. (Hons.)", "Deptt. of Commerce - Dr. Manika Jain");
+            coursesMap.put("B. A. (Hons.) Economics", "Deptt. of Economics - Dr. Apra Sinha");
+            coursesMap.put("B. Sc. (Hons.) Mathematics", "Deptt. of Mathematics - Dr. Raj Kumar Bhagat");
+
+            String[] keys = coursesMap.keySet().toArray(new String[0]);
+
+            lvCourses.setAdapter(new ArrayAdapter<String>(
+                    this, R.layout.list_item, R.id.tvListItem, keys
+            ));
+
+            lvCourses.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Snackbar.make(lvCourses, coursesMap.get(keys[position]), Snackbar.LENGTH_SHORT)
+                            .show();
+                }
+            });
+        }
+    }
+}
+

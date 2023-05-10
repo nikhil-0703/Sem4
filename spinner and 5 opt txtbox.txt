@@ -1,0 +1,221 @@
+PRACTICAL 5
+Objective
+Create spinner with strings taken from resource folder (res >> value folder) and on changing the spinner value, Image will change.
+Code
+app/src/main/res/layout/activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Spinner
+            android:id="@+id/spIcon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="150dp" />
+
+        <ImageView
+            android:id="@+id/ivIcon"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_below="@id/spIcon"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_launcher_background" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+app/src/main/java/pro/ghosh/spinnerfromresarray/MainActivity.java
+package pro.ghosh.spinnerfromresarray;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private Spinner spinner;
+    private ImageView ivIcon;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                this,
+                R.array.icons,
+                android.R.layout.simple_spinner_item
+        );
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner = (Spinner) findViewById(R.id.spIcon);
+        spinner.setOnItemSelectedListener(this);
+        spinner.setAdapter(adapter);
+
+        ivIcon = (ImageView) findViewById(R.id.ivIcon);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        switch (parent.getItemAtPosition(position).toString()) {
+            case "sdg1":
+                ivIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_sdg1));
+                break;
+            case "sdg2":
+                ivIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_sdg2));
+                break;
+            case "sdg5":
+                ivIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_sdg5));
+                break;
+            case "sdg10":
+                ivIcon.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_sdg10));
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+}
+
+app/src/main/res/values/strings.xml
+<resources>
+    <string name="app_name">SpinnerFromResArray</string>
+    <string-array name="icons">
+        <item>sdg1</item>
+        <item>sdg2</item>
+        <item>sdg5</item>
+        <item>sdg10</item>
+    </string-array>
+</resources>
+
+
+
+
+
+
+
+
+
+
+
+PRACTICAL 6
+Objective
+Create a menu with 5 options and selected option should appear in text box in upper case.
+Code
+app/src/main/res/layout/activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/etMenuItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:hint="@string/select_a_menu_item"
+            android:textAlignment="center" />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+app/src/main/java/pro/ghosh/menutotextbox/MainActivity.java
+package pro.ghosh.menutotextbox;
+
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private EditText etMenuItem;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        etMenuItem = (EditText) findViewById(R.id.etMenuItem);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        etMenuItem.setText(item.getTitle().toString().toUpperCase());
+        return super.onOptionsItemSelected(item);
+    }
+}
+
+app/src/main/res/menu/main_menu.xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/miSettings"
+        android:title="@string/settings" />
+    <item
+        android:id="@+id/miBackup"
+        android:title="@string/backup" />
+    <item
+        android:id="@+id/miReset"
+        android:title="@string/reset" />
+    <item
+        android:id="@+id/miAbout"
+        android:title="@string/about" />
+    <item
+        android:id="@+id/miHelp"
+        android:title="@string/help" />
+</menu>
+
+app/src/main/res/values/strings.xml
+<resources>
+    <string name="app_name">MenuToTextBox</string>
+    <string name="settings">Settings</string>
+    <string name="backup">Backup</string>
+    <string name="reset">Reset</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="select_a_menu_item">Select a Menu Item</string>
+</resources>
